@@ -1,7 +1,10 @@
 # env
-set WORKSPACE_DIR      "vivado-work/vivado_proj"
+set CURRENT_DIR        [pwd]
+set HOME_DIR           [file dirname $CURRENT_DIR]
+set WORKSPACE_DIR      "vivado_proj"
 set PROJECT_NAME       "vivado_proj"
-set BLOCK_DESIGN_NAME  "design1"
+set BD_TCL             ${HOME_DIR}/tcl/gen_bd.tcl
+lappend ip_repo_path_list [file join ${CURRENT_DIR} "ip_repo"]
 set ZYBO               "zyboz7-20"
 set KV260              "kv260"
 set BOARD              ${ZYBO}
@@ -30,9 +33,22 @@ if {  ${BOARD}  == ${ZYBO} } then {
 
 
 # create project
-if { [ file exists ${WORKSPACE_DIR}/vivado_proj/${PROJECT_NAME}.xpr ] == 0 } then {
+if { [ file exists ${WORKSPACE_DIR}/${PROJECT_NAME}.xpr ] == 0 } then {
     create_project -force ${PROJECT_NAME} ${WORKSPACE_DIR} -part ${CHIP}
     set_property board_part  ${BOARD_PORT} [current_project]
+    #set ip repo
+    if {[info exists ip_repo_path_list] && [llength $ip_repo_path_list] > 0 } {
+        set_property ip_repo_paths $ip_repo_path_list [current_fileset]
+        update_ip_catalog
+    }
+    #import bd
+    if {[file exists ${BD_TCL}] == 1 } then {
+        source ${BD_TCL}
+        regenerate_bd_layout
+        save_bd_design
+        set design_bd_name  [get_bd_designs]
+        make_wrapper -files [get_files $design_bd_name.bd] -top -import
+    }
 
 }
 

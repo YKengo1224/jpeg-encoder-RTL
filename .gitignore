@@ -1,2 +1,15 @@
+sim_dir/xsim/sim_run.dir/*
+sim_dir/sim/*.shm
+sim_dir/sim/xcelium*
+sim_dir/sim/xcelium.d/*
+sim_dir/sim/xm*
+sim_dir/sim/.bpad/*
+sim_dir/sim/bpad*
+sim_dir/sim/.simvision/*
 vivado-work/log/
-vivado-work/vivado*
+vivado-work/vivado_proj/
+vivado-work/*.str
+vivado-work/.Xil
+vivado-work/ip_repo/*
+!vivado-work/ip_repo/.git_dummy
+verify/sim_result/
