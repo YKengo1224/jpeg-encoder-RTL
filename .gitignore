@@ -11,7 +11,7 @@ vivado-work/vivado_proj/
 vivado-work/*.str
 vivado-work/.Xil
 vivado-work/ip_repo/*
-!vivado-work/ip_repo/.git_dummy
+!vivado-work/ip_repo/.gitdummy
 vitis-work/*
 !vitis-work/.gitdummy
 verify/sim_result/
