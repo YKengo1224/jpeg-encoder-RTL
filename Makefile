@@ -45,7 +45,7 @@ create: ## create vivado proj  ## make create
 
 gui: ## open vivado gui ## make gui
 	mkdir -p $(VIVADO_DIR)/$(LOG_DIR)
-	cd $(VIVADO_DIR) && vivado $(VIVADO_OPTS) $(PROJ_DIR)/*.xpr &
+	cd $(VIVADO_DIR) && vivado $(VIVADO_OPTS) $(XPR_FILE) &
 
 gen: ## generate bitstream and hw platform  ## make gen
 	mkdir -p $(VIVADO_DIR)/$(LOG_DIR)
@@ -60,9 +60,7 @@ bd: ## export block design ## make bd
 # sim: ## run simyuration Icurus Verilog(ic) or xcelium(xc) ## make sim SIMULATOR=ic
 # 	$(MAKE) -C $(SIM_DIR) sim SIMULATOR=$(SIMULATOR)
 # wave:
-hoge:
-	@echo $(VIVADO_DIR)
-	@echo $(MAKEFILE_LIST)
+
 ##############################################
 
 
