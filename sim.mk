@@ -94,13 +94,16 @@ comp: $(TESTBENCH) $(RTL)
 	mv $(LOG_FILE) $(SLOG_DIR)
 
 sim: comp  ## run simyuration Icurus Verilog(ic) or xcelium(xc) ## [make sim SIMULATOR=ic] or [make sim SIMULATOR=xc] (default:ic)
-	@mkdir -p $(WAVE_DIR)
+	@mkdir -p $(SWAVE_DIR)
 	$(SIM_COM)
 	mv $(WAVE_FILE) $(SWAVE_DIR)/
 
 
 wav: $(SWAVE_DIR)/$(WAVE_FILE) ## open wave ## make wav
 	cd $(SWAVE_DIR) && $(WAVE_COM) $(WAVE_FILE) & 
+
+clean: ## clean simulation result file ## make clean
+	$(MAKE) sim_clean
 
 sim_clean:
 	rm -rf $(SIM_LOG_DIR) $(SIM_WORK_DIR) $(WAVE_DIR)

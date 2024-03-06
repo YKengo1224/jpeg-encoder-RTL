@@ -76,8 +76,8 @@ bd: $(BD_FILE) ## export block design ## make bd
 #simulation command
 #sim:
 #
-clean:
-	$(MAKE) sim_clean
+#clean:
+#	$(MAKE) sim_clean
 ##############################################
 
 
