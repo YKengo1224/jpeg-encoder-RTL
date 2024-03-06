@@ -1,13 +1,7 @@
-sim_dir/xsim/sim_run.dir/*
-sim_dir/sim/*.shm
-sim_dir/sim/xcelium*
-sim_dir/sim/xcelium.d/*
-sim_dir/sim/xm*
-sim_dir/sim/.bpad/*
-sim_dir/sim/bpad*
-sim_dir/sim/.simvision/*
+sim_log/*
+sim_work/*
+wave/*
 vivado-work/*
 vitis-work/*
 !vitis-work/.gitdummy
-verify/sim_result/
 

@@ -22,7 +22,7 @@ wait_on_run impl_1
 launch_runs impl_1 -to_step write_bitstream -jobs ${JOBS}
 wait_on_run impl_1
 
-
+#hardware platform
 write_hw_platform -fixed -include_bit -force -file system.xsa
 
 exit

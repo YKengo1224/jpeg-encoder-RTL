@@ -2,16 +2,30 @@
 VIVADO_DIR      := vivado-work
 PROJ_DIR        := vivado_proj
 LOG_DIR         := log
-TCL_DIR         := ../tcl
+TCL_DIR         := ./tcl
 RTL_DIR         := ./rtl
-SIM_DIR         := ./sim_dir
-SIM_IC_DIR      := $(SIM_DIR)/ic
-SIM_XC_DIR      := $(SIM_DIR)/xc
-WAVE_DIR        := $(SIM_DIR)/wave
+TB_DIR          := ./tb
+WAVE_DIR        := ./wave
+SIM_LOG_DIR     := ./sim_log
+SIM_WORK_DIR    := ./sim_work
+
+
+
+#simulation test name
+TEST_NAME       := Tb_Template
+
+#RTL file
+RTL             := $(wildcard $(RTL_DIR)/*.v $(RTL_DIR)/*.sv)
+
+#simulator
+SIMULATOR       := ic
+#SIMULATOR       := xc
 
 #simulation Makefile path
-SIM_MK          := sim_dir/sim.mk
+#SIM_MK          := ./sim_iverilog.mk
+SIM_MK          := ./sim.mk
 include $(SIM_MK)
+
 
 #vivado file config
 XPR_FILE        := $(PROJ_DIR)/$(PROJ_DIR).xpr;
@@ -26,41 +40,44 @@ VIVADO_TCL_OPTS := -mode tcl -source
 #simulator
 ##ic : icurus verilog   
 ##xc : xcelium
-#SIMURATOR       := ic
-SIMURATOR       := xc
+#SIMURATOR      = ic
+SIMURATOR       = xc
 
 
 ##########################################################
 #include file
 #include $(SIM_DIR)/Makefile
 
-.PHONY : create gui gen bd sim wave wc help
+.PHONY : create gui gen bd sim wave  help
 
 .DEFAULT_GOAL := help
 
 ################vivado command################
 create: ## create vivado proj  ## make create
 	mkdir -p $(VIVADO_DIR)/$(LOG_DIR)
-	cd $(VIVADO_DIR) && vivado $(VIVADO_OPTS) $(VIVADO_TCL_OPTS) $(TCL_DIR)/create_proj.tcl
+	cd $(VIVADO_DIR) && vivado $(VIVADO_OPTS) $(VIVADO_TCL_OPTS) ../$(TCL_DIR)/create_proj.tcl
 
-gui: ## open vivado gui ## make gui
+gui: $(XPR_FILE) ## open vivado gui ## make gui
 	mkdir -p $(VIVADO_DIR)/$(LOG_DIR)
 	cd $(VIVADO_DIR) && vivado $(VIVADO_OPTS) $(XPR_FILE) &
 
 gen: ## generate bitstream and hw platform  ## make gen
 	mkdir -p $(VIVADO_DIR)/$(LOG_DIR)
-	cd $(VIVADO_DIR) && vivado $(VIVADO_OPTS) $(VIVADO_TCL_OPTS) $(TCL_DIR)/generate_bitstream.tcl
+	cd $(VIVADO_DIR) && vivado $(VIVADO_OPTS) $(VIVADO_TCL_OPTS) ../$(TCL_DIR)/generate_bitstream.tcl
 
-bd: ## export block design ## make bd
-		cd $(VIVADO_DIR) && echo "open_project $(XPR_FILE);open_bd_design $(BD_FILE);write_bd_tcl -force $(BD_TCL)" | vivado $(VIVADO_OPTS) -mode tcl
+bd: $(BD_FILE) ## export block design ## make bd
+		cd $(VIVADO_DIR) && echo "open_project $(XPR_FILE);open_bd_design $(BD_FILE);write_bd_tcl -force ../$(BD_TCL)" | vivado $(VIVADO_OPTS) -mode tcl
 ##############################################
 
 
-############simuration command################
-# sim: ## run simyuration Icurus Verilog(ic) or xcelium(xc) ## make sim SIMULATOR=ic
-# 	$(MAKE) -C $(SIM_DIR) sim SIMULATOR=$(SIMULATOR)
-# wave:
 
+
+############simuration command################
+#simulation command
+#sim:
+#
+clean:
+	$(MAKE) sim_clean
 ##############################################
 
 
