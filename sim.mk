@@ -27,6 +27,7 @@
 #SIMULATOR = xsim
 # SIMULATOR  = ic
 # SIMULATOR  = xc
+# SIMULATOR  = xsim
 
 SLOG_DIR  = $(SIM_LOG_DIR)/$(SIMULATOR)
 SWORK_DIR = $(SIM_WORK_DIR)/$(SIMULATOR)
@@ -66,7 +67,7 @@ ifeq ($(SIMULATOR),xc)
 	SIM_COM   = 
 	WAVE_COM  = simvision
 
-else
+else ifeq ($(SIMULATOR),ic)
 	WAVE_FILE = $(TEST_NAME).vcd
 	COMP_FILE = work
 	LOG_FILE  = comp.log
@@ -77,6 +78,21 @@ else
 	COMP_COM  = iverilog $(TESTBENCH) $(RTL) $(COMP_OPTS) -s $(TEST_NAME) -o $(COMP_FILE) 2>&1 | tee $(LOG_FILE)
 	SIM_COM   = vvp $(SIM_OPTS) $(SWORK_DIR)/$(COMP_FILE)
 	WAVE_COM  = gtkwave 
+
+else
+	WAVE_FILE = $(TEST_NAME).vcd
+	COMP_FILE = axsim.sh xsim.dir
+	LOG_FILE  = xelab* xvlog*
+
+	COMP_OPTS = --timescale 1ns/1ps --standalone
+	SIM_OPTS  = 
+
+	COMP_COM  = xvlog -sv $(TESTBENCH) $(RTL) && xelab $(TEST_NAME) $(COMP_OPTS) && sed -i 's|xsim.dir/work.$(TEST_NAME)/axsim|$(SWORK_DIR)/xsim.dir/work.$(TEST_NAME)/axsim|' axsim.sh
+	SIM_COM   = $(SWORK_DIR)/axsim.sh  && mv xsim.log $(SLOG_DIR)
+	WAVE_COM  = gtkwave 
+
+
+
 endif
 # ifeq($(SIMULATOR),xc)
 # 	TARGET   := compile
@@ -90,16 +106,17 @@ comp: $(TESTBENCH) $(RTL)
 	@mkdir -p $(SWORK_DIR)
 	@mkdir -p $(SLOG_DIR)
 	$(COMP_COM)
-	mv $(COMP_FILE) $(SWORK_DIR)
+	cp -r  $(COMP_FILE) $(SWORK_DIR)
+	rm -rf $(COMP_FILE) 
 	mv $(LOG_FILE) $(SLOG_DIR)
 
-sim: comp  ## run simyuration Icurus Verilog(ic) or xcelium(xc) ## [make sim SIMULATOR=ic] or [make sim SIMULATOR=xc] (default:ic)
+sim: comp  ## run simyuration [iverilog,xcelium,vivado sim] ## make sim SIMULATOR={ic,xc.xsim} (default:ic)
 	@mkdir -p $(SWAVE_DIR)
 	$(SIM_COM)
-	mv $(WAVE_FILE) $(SWAVE_DIR)/
+	cp -r $(WAVE_FILE) $(SWAVE_DIR)/
+	rm -rf $(WAVE_FILE)
 
-
-wav: $(SWAVE_DIR)/$(WAVE_FILE) ## open wave ## make wav
+wav: $(SWAVE_DIR)/$(WAVE_FILE) ## open wave ## make wav SIMULATOR={ic,xc.xsim} (default:ic) 
 	cd $(SWAVE_DIR) && $(WAVE_COM) $(WAVE_FILE) & 
 
 clean: ## clean simulation result file ## make clean
