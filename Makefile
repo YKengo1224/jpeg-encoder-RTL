@@ -8,11 +8,12 @@ TB_DIR          := ./tb
 WAVE_DIR        := ./wave
 SIM_LOG_DIR     := ./sim_log
 SIM_WORK_DIR    := ./sim_work
+VERIFY_DIR      := ./sw_verify
 
 
 
 #simulation test name
-TEST_NAME       := Tb_Template
+TEST_NAME       := sim_topmodule
 
 #RTL file
 RTL             := $(wildcard $(RTL_DIR)/*.v $(RTL_DIR)/*.sv)

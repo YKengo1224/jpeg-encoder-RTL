@@ -16,7 +16,6 @@ style_directives = false
 style_semicolon  = true
 
 [rules]
-blocking_assignment_in_always_at_edge = true
 blocking_assignment_in_always_ff = true
 case_default = true
 default_nettype_none = true

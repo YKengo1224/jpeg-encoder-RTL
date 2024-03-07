@@ -84,7 +84,7 @@ else
 	COMP_FILE = axsim.sh xsim.dir
 	LOG_FILE  = xelab* xvlog*
 
-	COMP_OPTS = --timescale 1ns/1ps --standalone
+	COMP_OPTS = --timescale 1ns/1ps --standalone --debug typical
 	SIM_OPTS  = 
 
 	COMP_COM  = xvlog -sv $(TESTBENCH) $(RTL) && xelab $(TEST_NAME) $(COMP_OPTS) && sed -i 's|xsim.dir/work.$(TEST_NAME)/axsim|$(SWORK_DIR)/xsim.dir/work.$(TEST_NAME)/axsim|' axsim.sh
@@ -118,6 +118,10 @@ sim: comp  ## run simyuration [iverilog,xcelium,vivado sim] ## make sim SIMULATO
 
 wav: $(SWAVE_DIR)/$(WAVE_FILE) ## open wave ## make wav SIMULATOR={ic,xc.xsim} (default:ic) 
 	cd $(SWAVE_DIR) && $(WAVE_COM) $(WAVE_FILE) & 
+
+verify: ##check simulation result
+	cd $(VERIFY_DIR) && cargo run
+
 
 clean: ## clean simulation result file ## make clean
 	$(MAKE) sim_clean

@@ -4,4 +4,5 @@ wave/*
 vivado-work/*
 vitis-work/*
 !vitis-work/.gitdummy
-
+sw_verify/sim_result/*.dat
+sw_verify/target/debug
